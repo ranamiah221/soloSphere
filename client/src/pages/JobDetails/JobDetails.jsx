@@ -1,15 +1,18 @@
 import { useContext, useState } from "react";
 import DatePicker from "react-datepicker"
-import { useLoaderData } from "react-router-dom"
+import { useLoaderData, useNavigate } from "react-router-dom"
 import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
 import axios from "axios";
 
 const JobDetails = () => {
-    const [startDate, setStartDate] = useState(new Date());
-    const job = useLoaderData({})
-    const{ _id,deadline, category, job_title, description,buyer, min_price, max_price, }=(job)
-    const {user}= useContext(AuthContext)
+  const job = useLoaderData({})
+  const navigate = useNavigate();
+  const {user}= useContext(AuthContext)
+  const [startDate, setStartDate] = useState(new Date());
+ 
+  const{ _id,deadline, category, job_title, description,buyer, min_price, max_price }=job;
+    
    
     const handleBids= async(event)=>{
     event.preventDefault()
@@ -23,29 +26,28 @@ const JobDetails = () => {
     const date = startDate;
     const comment = form.comment.value;
     const status ="Pending"
-    const bidData= {jobId, price, email, date, comment, status }
+    const bidData= {jobId, price,job_title,buyer, date, category,status,email,comment }
     try{
-        const {data} = await axios.post('http://localhost:9000/bids', bidData)
+        const {data} = await axios.post('https://solosphere-live-ranarasul21-gmailcom-ranas-projects-c2243bd3.vercel.app/bids', bidData)
        if(data.insertedId){
-              toast.success("Place biding successful")
+              toast.success("Place bid successfully")
+              navigate('/my-bids')
        }
+
     }
     catch(error){
-        toast.error(error.message)
+        toast.error(error.response.data)
     }
-    
-
+ 
     }
-
-
-    
+ 
     return (
       <div className='flex flex-col md:flex-row justify-around gap-5 my-10  items-center min-h-[calc(100vh-306px)] md:max-w-screen-xl mx-auto '>
         {/* Job Details */}
         <div className='flex-1  px-4 py-7 bg-white rounded-md shadow-md md:min-h-[400px]'>
           <div className='flex items-center justify-between'>
             <span className='text-sm font-light text-gray-800 '>
-            { new Date().toLocaleDateString({deadline})}
+            { new Date(deadline).toLocaleDateString()}
             </span>
             <span className='px-4 py-1 text-xs text-blue-800 uppercase bg-blue-200 rounded-full '>
             {category}
@@ -95,6 +97,7 @@ const JobDetails = () => {
                   id='price'
                   type='text'
                   name='price'
+                  required
                   className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md   focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring'
                 />
               </div>

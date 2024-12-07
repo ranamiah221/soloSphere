@@ -17,6 +17,9 @@ const Navbar = () => {
           <li>
             <Link to='/'>Home</Link>
           </li>
+          <li>
+            <Link to='/all-jobs'>All Jobs</Link>
+          </li>
 
           {
             user ? " ":<li>
@@ -48,13 +51,13 @@ const Navbar = () => {
                 <Link to='/addJobs' className="justify-between">Add Job</Link>
               </li>
               <li>
-                <div>My Posted Jobs</div>
+                <Link to='/my-posted-job'>My Posted Jobs</Link>
               </li>
               <li>
-                <div>My Bids</div>
+                <Link to='/my-bids'>My Bids</Link>
               </li>
               <li>
-                <div>Bid Requests</div>
+                <Link to='/bid-requests'>Bid Requests</Link>
               </li>
               <li className="mt-2">
                 <button onClick={()=>logOut()} className="bg-gray-200 block text-center">Logout</button>

@@ -4,9 +4,13 @@ import axios from 'axios';
 import "react-datepicker/dist/react-datepicker.css";
 import { AuthContext } from "../../provider/AuthProvider";
 import { toast } from 'react-hot-toast';
+import { useNavigate } from "react-router-dom";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const AddJobs = () => {
-    const [startDate, setStartDate] = useState(new Date());
+    const [startDate, setStartDate] = useState();
+    const axiosSecure = useAxiosSecure();
+    const navigate = useNavigate();
     const {user}=useContext(AuthContext);
     const handleAddJob=async(event)=>{
         event.preventDefault();
@@ -26,9 +30,10 @@ const AddJobs = () => {
         const job={job_title, buyer, deadline,category,min_price,max_price,description}
         console.log(job)
         try{
-            const {data}= await axios.post('http://localhost:9000/jobs', job)
+            const {data}= await axiosSecure.post('/jobs', job)
             if(data.insertedId){
               toast.success('Job Add Successful')
+              navigate('/my-posted-job')
             }
         }
         catch(error){

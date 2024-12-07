@@ -10,6 +10,7 @@ import {
   updateProfile,
 } from 'firebase/auth'
 import app from '../firebase/firebase.config'
+import axios from 'axios'
 
 
 export const AuthContext = createContext(null)
@@ -37,6 +38,10 @@ const AuthProvider = ({ children }) => {
 
   const logOut = async () => {
     setLoading(true)
+    axios.get('https://solosphere-live-ranarasul21-gmailcom-ranas-projects-c2243bd3.vercel.app/logout',{withCredentials: true})
+    .then(res=>{
+      console.log(res.data);
+    })
     return signOut(auth)
   }
 
@@ -52,6 +57,14 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
       setUser(currentUser)
       setLoading(false)
+      if(currentUser){
+        const loggedUser = {email : currentUser?.email }
+        axios.post('https://solosphere-live-ranarasul21-gmailcom-ranas-projects-c2243bd3.vercel.app/jwt',loggedUser,{withCredentials: true})
+        .then(res=>{
+          console.log(res.data);
+        })
+      }
+      
     })
     return () => {
       return unsubscribe()

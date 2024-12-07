@@ -7,16 +7,16 @@ import { AuthContext } from "../../provider/AuthProvider";
 import Job from "../../components/Job/Job";
 
 const Home = () => {
-  const {user}= useState(AuthContext)
+ 
   const [jobs, setJobs]= useState([])
   useEffect(()=>{
     const getJob=async()=>{
-      const {data}= await axios.get('http://localhost:9000/jobs')
+      const {data}= await axios.get('https://solosphere-live-ranarasul21-gmailcom-ranas-projects-c2243bd3.vercel.app/jobs')
       setJobs(data)
     }
     getJob();
     
-  },[user])
+  },[])
 
   return (
     <div>
